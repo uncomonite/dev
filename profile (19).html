@@ -1,0 +1,25 @@
+{% extends "includes/auth_shell.html" %}
+{% load i18n %}
+{% load form_tags %}
+
+{% block title %}{% trans "Change password" %}{% endblock %}
+
+{% block auth_title %}{% trans "Update your account security" %}{% endblock %}
+{% block auth_description %}{% trans "Change your password anytime to keep your account protected and easy to trust." %}{% endblock %}
+
+{% block auth_card %}
+  <div class="rh-card-header">
+    <h2 class="rh-card-title">{% trans "Change password" %}</h2>
+    <p class="rh-card-text">{% trans "Enter the current password first, then choose a new one." %}</p>
+  </div>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      {% include "includes/form_field.html" with field=field %}
+    {% endfor %}
+    <button type="submit" class="btn btn-warning text-white w-100 mt-4 rh-btn-main">{% trans "Update password" %}</button>
+  </form>
+  <div class="rh-inline-links mt-4">
+    <a href="{% url 'users:profile' %}">{% trans "Back to profile" %}</a>
+  </div>
+{% endblock %}

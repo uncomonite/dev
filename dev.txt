@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Profile" %}{% endblock %}
+
+{% block content %}
+<section class="rh-page rh-profile-home">
+  <div class="container rh-shell">
+    <div class="rh-profile-home-card">
+      <div class="rh-profile-cover"></div>
+
+      <div class="rh-profile-home-body">
+        <form method="post" enctype="multipart/form-data" class="rh-avatar-upload-form">
+          {% csrf_token %}
+          <label class="rh-profile-avatar-button" for="id_image">
+            {% if profile.image %}
+              <img class="rh-profile-avatar-home" src="{{ profile.image.url }}" alt="{{ request.user.username }}">
+            {% else %}
+              <span class="rh-profile-avatar-home rh-profile-avatar-home--empty">{% trans "Add photo" %}</span>
+            {% endif %}
+          </label>
+          {{ avatar_form.image.as_widget|safe }}
+        </form>
+
+        <div class="rh-profile-home-header">
+          <div class="rh-profile-home-intro">
+            <h1 class="rh-profile-home-name">{{ request.user.get_full_name|default:request.user.username }}</h1>
+            <p class="rh-profile-home-subtitle">@{{ request.user.username }}</p>
+          </div>
+          <a href="{% url 'users:profile_settings' %}" class="rh-settings-button" aria-label="{% trans 'Profile settings' %}">
+            <span aria-hidden="true">&#9881;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    const input = document.getElementById("id_image");
+    if (!input) return;
+    input.classList.add("rh-visually-hidden");
+    input.addEventListener("change", function () {
+      if (input.files && input.files.length) {
+        input.form.submit();
+      }
+    });
+  })();
+</script>
+{% endblock %}
